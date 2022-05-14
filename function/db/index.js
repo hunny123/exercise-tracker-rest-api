@@ -3,7 +3,8 @@ import mongoose from "mongoose";
 let instance;
 const getMongoose = async () => {
   // "replace this with actuall string"
-  const mongo_uri = process.env.DB;
+  const mongo_uri =
+    process.env.DB
 
   if (instance) {
     return instance;

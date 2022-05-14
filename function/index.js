@@ -5,6 +5,7 @@ import cors from "cors";
 import getInstance from "./db/index.js";
 import userRoute from "./routes/user.js";
 import exerciseRoute from "./routes/exercise.js";
+import validProfile from "./services/validProfile.js";
 // import { config } from "dotenv";
 
 // config();
@@ -26,18 +27,8 @@ app.get("/ping", (req, res) => {
 // service for user routes
 app.use("/user", userRoute);
 //
-app.use(
-  "/exercise/:id",
-  (req, resp, next) => {
-    console.log(req.params.id);
-    if (req.params.id !== "i") {
-      resp.status("401").send({ msg: "unauthorised" });
-      return;
-    }
-    next();
-  },
-  exerciseRoute
-);
+app.use("/exercise/:id", validProfile);
+app.use("/exercise", exerciseRoute);
 //
 app.listen(PORT, () => {
   console.log("services is running on" + PORT);

@@ -1,5 +1,6 @@
 import express from "express";
 import User from "../schemas/user.js";
+import checkUserExist from "../services/checkUser.js";
 const userRoute = express.Router();
 
 userRoute.get("/list", async (req, res) => {
@@ -11,27 +12,23 @@ userRoute.get("/list", async (req, res) => {
     res.status(502).send({ msg: e.message });
   }
 });
-userRoute.post("/create", async (req, res) => {
+userRoute.post("/create", checkUserExist, async (req, res) => {
   const { username } = req.body;
-  const custom_id = "@" + username;
+  const custom_id = username + "@" + username.length + "1";
   try {
     const users = new User({ username, custom_id, count: 0 });
     await users.save();
     res.send({ msg: "succes" });
   } catch (e) {
-    res.status(401).send({ msg: e.message });
+    res.status(500).send({ msg: e.message });
   }
 });
-userRoute.get("/availablity/:name", async (req, res) => {
+userRoute.get("/availablity/:name", checkUserExist, async (req, res) => {
   const { name } = req.params;
   try {
-    const user = await User.find({ username: name });
-    user.length > 0 &&
-      res.send({ available: false, message: "user name exist" });
-    user.length === 0 &&
-      res.send({ available: true, message: "user name available" });
+    res.send({ available: true, message: `user ${name} is available` });
   } catch (e) {
-    res.status(404).send({ msg: e.message });
+    res.status(500).send({ msg: e.message });
   }
 });
 
