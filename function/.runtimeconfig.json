@@ -1,6 +1,0 @@
-{
-  "firebase": {
-    "projectId": "exercise-tracker-rest-api",
-    "storageBucket": "exercise-tracker-rest-api.appspot.com"
-  }
-}
